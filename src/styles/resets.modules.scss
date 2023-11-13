@@ -1,0 +1,54 @@
+@use "./no-build/mixins" as mixins;
+
+// *,
+// ::before,
+// ::after {
+//     box-sizing: border-box;
+    
+//     @include mixins.reducedMotion {
+//         scroll-behavior: auto !important;
+//         transition-duration: 0.01ms !important;
+//         animation-duration: 0.01ms !important;
+//         animation-iteration-count: 1 !important;
+//     }
+// }
+
+html {
+    box-sizing: border-box;
+
+    text-rendering: optimizeSpeed;
+    -webkit-text-size-adjust: 100%;
+
+    font-synthesis: none;
+
+    &:focus-within {
+        scroll-behavior: smooth;
+    }
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+small {
+    font-size: 80%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+textarea {
+    border: none;
+    background-color: transparent;
+}
+
+button,
+a {
+    font-weight: 700;
+}

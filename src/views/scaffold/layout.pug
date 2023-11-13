@@ -1,0 +1,16 @@
+doctype html
+html(theme= currentTheme) 
+head
+    //- link(rel="stylesheet" href="../styles/resets.css")
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin="use-credential")
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap")
+    title= title
+
+    //- script(nonce=nonceId type="module" src="/client/htmx.mjs")
+
+    style(none=nonceId)= require("../styles/resets.modules.css")
+
+    block head
+body
+    block content

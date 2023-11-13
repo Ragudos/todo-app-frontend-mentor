@@ -1,0 +1,6 @@
+extends scaffold/layout.pug
+
+block content
+    h1= message
+    button(hx-put="/change-theme/dark" hx-trigger="click" hx-swap="none") Click me
+    button(hx-put="/change-theme/system" hx-trigger="click" hx-swap="none") Click me
