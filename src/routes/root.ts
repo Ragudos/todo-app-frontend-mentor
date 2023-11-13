@@ -1,21 +1,54 @@
 import { Router } from "express";
 
+import changeThemeRoute from "./put/change-theme";
+import addTodoRoute from "./post/add-todo";
+import validationRoute from "./post/validate";
+import { db } from "@/lib/db";
+import { todos } from "@/model/schema";
+
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const cookies = req.headers.cookie;
+    const isMobile =
+        req.headers["user-agent"]?.match(/android/i) ||
+        req.headers["user-agent"]?.match(/iphone/i);
 
-    const theme = cookies
-        ? cookies.split("theme=")[1]
-        : "system";
+    try {
+        const listOfTodos = await db.select().from(todos);
 
-    res.render("index", {
-        title: "Hello, World!",
-        message: "I am generated with pug!",
-        cookieValue: cookies,
-        currentTheme: theme,
-        nonceId: res.locals.cspNonce
-    });
+        console.log(listOfTodos);
+
+        res.render("index", {
+            preloadImages: isMobile
+                ? [
+                      "/assets/images/bg-mobile-dark.jpg",
+                      "/assets/images/bg-mobile-light.jpg",
+                  ]
+                : [
+                      "/assets/images/bg-desktop-dark.jpg",
+                      "/assets/images/bg-desktop-light.jpg",
+                  ],
+            todos: listOfTodos
+        });
+    } catch (err) {
+        res.status(500).render("error", {
+            status: 500,
+            preloadImages: isMobile
+                ? [
+                      "/assets/images/bg-mobile-dark.jpg",
+                      "/assets/images/bg-mobile-light.jpg",
+                  ]
+                : [
+                      "/assets/images/bg-desktop-dark.jpg",
+                      "/assets/images/bg-desktop-light.jpg",
+                  ],
+            message: "Something went wrong. Please contact the site owner if you are seeing this."
+        });
+    }
 });
+
+router.use(changeThemeRoute);
+router.use(addTodoRoute);
+router.use(validationRoute);
 
 export default router;

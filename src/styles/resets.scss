@@ -1,0 +1,503 @@
+@use "./no-build/mixins" as mixins;
+@use "./no-build/variables" as variables;
+
+:root {
+    $backgroundColor: variables.$backgroundColor;
+    $textColor: variables.$textColor;
+
+    font-size: 18px;
+    font-family: "Josefin Sans", "Inter", system-ui, sans-serif;
+    background-color: hsl($backgroundColor);
+    color: hsl($textColor);
+}
+
+[data-theme=dark] {
+    $backgroundColor: 235 21% 11%;
+    $textColor: 234 39% 85%;
+    background-color: hsl($backgroundColor);
+    color: hsl($textColor);
+}
+
+[data-theme=system] {
+    @include mixins.darkMode {
+        $backgroundColor: 235 21% 11%;
+        $textColor: 234 39% 85%;
+        background-color: hsl($backgroundColor);
+        color: hsl($textColor)
+    }
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;  
+        
+    box-shadow:
+        var(--_ring-offset, 0px 0px 0px 0px) var(--_clr-ring-offset, transparent),
+        var(--_ring, 0px 0px 0px 0px) var(--_clr-ring, transparent),
+        var(--_box-shadow, 0px 0px 0px 0px)
+    ;
+    
+    @include mixins.reducedMotion {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
+
+html {
+    box-sizing: border-box;
+
+    text-rendering: optimizeSpeed;
+    -webkit-text-size-adjust: 100%;
+
+    font-synthesis: none;
+
+    &:focus-within {
+        scroll-behavior: smooth;
+    }
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    @include mixins.container;
+
+    padding-block: 2rem;
+    justify-content: center;
+    min-height: 100dvh;
+
+    position: relative;
+}
+
+:where(ul, ol):not([role=list]) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+.heading {
+    hyphens: auto;
+
+    font-weight: 700;
+}
+
+h1,
+h1 {
+    font-size: clamp(
+        1.75em,
+        2vw + 0.025em,
+        2em
+    );
+}
+
+h2,
+.h2 {
+    font-size: clamp(
+        1.5em,
+        2vw + 0.025em,
+        1.75em
+    );
+}
+
+h3,
+.h3 {
+    font-size: clamp(
+        1.25em,
+        2vw + 0.025em,
+        1.5em
+    );
+}
+
+h4,
+.h4 {
+    font-size: clamp(
+        1.175em,
+        2vw + 0.025em,
+        1.25em
+    );
+}
+
+small {
+    font-size: 80%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button,
+input,
+textarea {
+    border: none;
+    background-color: transparent;
+}
+
+button,
+input,
+textarea,
+a {
+    color: inherit;
+
+    border-radius: 0.25rem;
+}
+
+button:not(.no-focus),
+input:not(.no-focus),
+textarea:not(.no-focus),
+a:not(.no-focus),
+.focus-within {
+    &:focus-visible,
+    &:focus-within {
+        transition-property: box-shadow, background-color, color, outline;
+        will-change: box-shadow, background-color, color, outline;
+        transition-duration: 250ms;
+
+        $backgroundColor: variables.$backgroundColor;
+
+        outline: 1px solid currentColor;
+
+        --_ring: 0px 0px 0px 3px;
+        --_clr-ring: currentColor;
+        --_ring-offset: 0px 0px 0px 1.5px;
+        --_clr-ring-offset: hsl($backgroundColor);
+    }
+}
+
+[data-theme=dark] {
+    button:not(.no-focus),
+    input:not(.no-focus),
+    textarea:not(.no-focus),
+    a:not(.no-focus),
+    .focus-within {
+        &:focus-visible,
+        &:focus-within {
+            $backgroundColor: 235 21% 11%;
+
+            outline: 1px solid currentColor;
+    
+            --_ring: 0px 0px 0px 3px;
+            --_clr-ring: currentColor;
+            --_ring-offset: 0px 0px 0px 1.5px;
+            --_clr-ring-offset: hsl($backgroundColor);
+        }
+    }
+}
+
+[data-theme=system] {
+    @include mixins.darkMode {
+        button:not(.no-focus),
+        input:not(.no-focus),
+        textarea:not(.no-focus),
+        a:not(.no-focus),
+        .focus-within {
+            &:focus-visible,
+            &:focus-within {
+                $backgroundColor: 235 21% 11%;
+
+                outline: 1px solid currentColor;
+
+                --_ring: 0px 0px 0px 3px;
+                --_clr-ring: currentColor;
+                --_ring-offset: 0px 0px 0px 1.5px;
+                --_clr-ring-offset: hsl($backgroundColor);
+            }
+        }
+    }
+}
+
+button,
+a {
+    font-weight: 700;
+
+    padding: 0.25rem;
+    font-size: 0.875em;
+
+    display: inline-flex;
+    --_display: inline-flex;
+
+    justify-content: center;
+    align-items: center;
+
+    &:active {
+        opacity: 0.87;
+    }
+}
+
+.full-width {
+    grid-column: full-width;
+}
+
+.contained {
+    grid-column: contained;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.icon,
+img {
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon {
+    background-size: contain;
+    width: 2rem;
+    height: 2rem;
+}
+
+.show-on-dark {
+    display: none;
+}
+
+[data-theme=dark] .show-on-light {
+    display: none;
+}
+
+[data-theme=dark] .show-on-dark {
+    display: var(--_display, initial);
+}
+
+[data-theme=system] {
+    .show-on-light {
+        @include mixins.darkMode {
+            display: none;
+        }
+    }
+    
+    .show-on-dark {
+        @include mixins.darkMode {
+            display: var(--_display, initial);
+        }
+    }
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    z-index: -1;
+
+    display: grid;
+    --_display: grid;
+
+    place-items: center;
+}
+
+.text-white {
+    color: hsl(0 0% 100%);
+}
+
+.tracking-wide {
+    letter-spacing: calc(2px + 0.325em);
+}
+
+.flex {
+    --_display: flex;
+    display: flex;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.no-focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.bg-card {
+    $bgCard: 0 0% 100%;
+
+    background-color: hsl($bgCard);
+}
+
+[data-theme=dark] .bg-card {
+    $bgCard: 235 24% 19%;
+
+    background-color: hsl($bgCard);
+}
+
+[data-theme=system] .bg-card {
+    @include mixins.darkMode {
+        $bgCard: 235 24% 19%;
+
+        background-color: hsl($bgCard);
+    }
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+.rounded-sm {
+    border-radius: 0.25rem;
+}
+
+.shadow-lg {
+    --_box-shadow: 0px 8px 32px hsl(0 0% 0% / 0.175);
+}
+
+.w-full {
+    width: 100%;
+}
+
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.cursor-text {
+    cursor: text;
+}
+
+[data-theme=dark] input::placeholder {
+    color: hsl(236, 33%, 92%, 0.175);
+}
+
+input {
+    $textColor: 220 98% 61%;
+
+    caret-color: hsl($textColor);
+
+    font-size: 0.9em;
+
+    font-family: inherit;
+}
+
+.strikethroguh {
+    text-decoration: line-through;
+}
+
+.finished-todo {
+    opacity: 0.5;
+}
+
+.unfinished-todo {
+    will-change: color;
+    transition-property: color;
+    transition-duration: 250ms;
+
+    &:hover {
+        color: hsl(236 9% 61%);
+    }
+}
+
+[date-theme=dark] {
+    .unfinished-todo {
+        &:hover {
+            color: hsl(236 39% 92%);
+        }
+    }
+}
+
+.rounded-full {
+    border-radius: 50%;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.sr-only {
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.justify-start {
+    justify-content: flex-start;
+}
+
+.todo-checkmark {
+    border: 1px solid currentColor;
+
+    opacity: 0.25;
+
+    will-change: opacity, border-color;
+    transition-property: opacity, border-color;
+    transition-duration: 250ms;
+
+    width: 1.25rem;
+    height: 1.25rem;
+
+    padding: 0.175rem;
+    
+    &:hover {
+        opacity: 1;
+        border-color: hsl(220, 98%, 61%);
+    }
+}
+
+.p-6 {
+    padding: 1.5rem;
+}
+
+button.toggle-finished-todo[aria-checked=true] {
+    .todo-checkmark {
+        background-image: linear-gradient(
+            40deg,
+            hsl(192, 100%, 67%),
+            hsl(280 87% 65%)
+        );
+    }
+}
+
+.shadow-none {
+    --_box-shadow: 0px 0px 0px 0px;
+}
+
+.toggle-finished-todo {
+    border-bottom: 1px solid currentColor;
+    border-radius: 0px;
+}

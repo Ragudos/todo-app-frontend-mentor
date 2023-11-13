@@ -11,12 +11,13 @@ const mode = isWatch ? "context" : "build";
 try {
     const ctx = await esbuild[mode]({
         bundle: true,
-        splitting: true,
+        splitting: false,
         metafile: true,
+        minify: isWatch ? false : true,
         format: "esm",
         platform: "browser",
         entryPoints: [path.resolve(__dirname, "./src/client/*.ts")],
-        outdir: path.resolve(__dirname, "./build"),
+        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./build"),
         entryNames: "[dir]/client/[name]",
         outExtension: {
             ".js": ".mjs"

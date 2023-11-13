@@ -5,7 +5,7 @@ import crypto from "node:crypto";
 export function generateNonceMiddleware(
     _req: Request,
     response: Response,
-    next: NextFunction,
+    next: NextFunction
 ) {
     const nonce = crypto.randomBytes(32).toString("base64");
 

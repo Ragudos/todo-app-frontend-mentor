@@ -3,7 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 export const cleanUrlMiddleware = (
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
 ) => {
     const isUrlUnclean = req.path.endsWith("/") && req.path.length > 1;
 

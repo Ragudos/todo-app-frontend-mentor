@@ -1,5 +1,19 @@
+@use "./variables" as variables;
+
 @mixin reducedMotion {
     @media (prefers-reduced-motion) {
+        @content;
+    }
+}
+
+@mixin container {
+    display: grid;
+    grid-template-columns:
+        [full-width-start] minmax(variables.$paddingInline, 1fr) [contained-start] min(100% - variables.$paddingInline * 2, variables.$maxContentWidth) [contained-end] minmax(variables.$paddingInline, 1fr) [full-width-end];
+}
+
+@mixin darkMode {
+    @media (prefers-color-scheme: dark) {
         @content;
     }
 }

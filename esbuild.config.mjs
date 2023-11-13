@@ -3,10 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import url from "url";
 import pugPlugin from "./esbuild.plugin.mjs";
-import { sassPlugin } from "esbuild-sass-plugin";
-import autoprefixer from "autoprefixer";
-import postcssPreserEnv from "postcss-preset-env"
-import postcss from "postcss";
+import { is } from "drizzle-orm";
 
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 const args = process.argv;
@@ -18,33 +15,20 @@ try {
         bundle: true,
         metafile: true,
         format: "cjs",
+        minify: isWatch ? false : true,
         platform: "node",
         entryPoints: [
             path.resolve(__dirname, "./src/index.ts"),
             path.resolve(__dirname, "./src/views/**/*.pug")
         ],
-        outdir: path.resolve(__dirname, "./build"),
+        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./build"),
         assetNames: "[dir]/[name]-[hash]",
         outExtension: {
             ".js": ".cjs"
         },
+        packages: isWatch ? "external" : undefined,
         plugins: [
             pugPlugin(),
-            sassPlugin({
-                async transform(source, _resolveDir) {
-                    const { css } = await postcss([
-                        autoprefixer,
-                        postcssPreserEnv({
-                            stage: 0
-                        })
-                    ]).process(source, {
-                        from: "*.scss",
-                        to: "*.css"
-                    });
-
-                    return css;
-                }
-            })
         ]
     });
 

@@ -15,12 +15,12 @@ const mode = isWatch ? "context" : "build";
 try {
     const ctx = await esbuild[mode]({
         bundle: true,
-        minifyWhitespace: true,
+        minify: isWatch ? false : true,
         metafile: true,
         format: "esm",
         platform: "node",
         entryPoints: [path.resolve(__dirname, "./src/styles/*.scss")],
-        outdir: path.resolve(__dirname, "./build"),
+        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./build"),
         entryNames: "[dir]/styles/[name]",
         plugins: [
             sassPlugin({
