@@ -17,7 +17,7 @@ export const todos = pgTable(
     },
     (table) => {
         return {
-            isFinishedIdx: index("is_finished_idx").on(table.isFinished),
+            isFinishedIdx: index("is_finished_idx").on(table.isFinished).asc(),
             creationDateIdx: index("creation_date_idx")
                 .on(table.creationDate)
                 .desc(),

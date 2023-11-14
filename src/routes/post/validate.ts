@@ -1,21 +1,11 @@
+import { type NextFunction, type Request, type Response } from "express";
 import {
-    type NextFunction,
-    type Request,
-    type Response,
-    Router
-} from "express";
-import { incrementAmountOfFailedRequests, resetAmountOfFailedRequests } from "@/lib/limiter";
+    incrementAmountOfFailedRequests,
+    resetAmountOfFailedRequests,
+} from "@/lib/limiter";
 import { isBadWord } from "@/lib/bad-word";
 
-const router = Router();
-
-router.post("/validate", validation);
-
-export function validation(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
+export function validation(req: Request, res: Response, next: NextFunction) {
     const todo = req.body.todo;
 
     if (!todo || todo.length < 5) {
@@ -33,9 +23,7 @@ export function validation(
 
         return;
     }
-    
+
     resetAmountOfFailedRequests();
     next();
 }
-
-export default router;

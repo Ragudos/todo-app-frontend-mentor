@@ -17,9 +17,10 @@ export function replaceWord(string: string) {
 }
 
 export function cleanSentence(string: string) {
-    return string.split(/\b/).map((word) => {
-        return isBadWord(word)
-            ? replaceWord(word)
-            : word;
-    }).join(/\b/.exec(string)![0]);
+    return string
+        .split(/\b/)
+        .map((word) => {
+            return isBadWord(word) ? replaceWord(word) : word;
+        })
+        .join(/\b/.exec(string)![0]);
 }

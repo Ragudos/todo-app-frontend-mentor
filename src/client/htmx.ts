@@ -24,24 +24,49 @@ interface ErrorEvent {
 }
 
 function init() {
+    if (document.documentElement.getAttribute("data-env") != "production") {
+        htmx.logAll();
+    }
+
+    document.querySelectorAll("[data-disableonclick]").forEach((item) => {
+        item.addEventListener("click", () => {
+            item.setAttribute("disabled", "true");
+
+            console.log("DISABLED");
+        });
+    });
+
     // @ts-expect-error
     document.body.addEventListener("htmx:responseError", (e: ErrorEvent) => {
         toast.error(
             {
                 title: e.detail.xhr.status.toString(),
-                message: e.detail.xhr.responseText
+                message: e.detail.xhr.responseText,
             },
             {
-                theme: document.documentElement.getAttribute("data-theme") as "dark" | "light" | "system",
+                theme: document.documentElement.getAttribute("data-theme") as
+                    | "dark"
+                    | "light"
+                    | "system",
                 role: "alert",
                 style: "glass",
                 close_button: {
                     is_shown_on_hover: false,
-                    position: "right"
+                    position: "right",
                 },
             }
         );
     });
+
+    document
+        .querySelector("#create-new-todo")
+        ?.addEventListener("submit", (_e) => {
+            document.querySelectorAll("input[type='text']").forEach((input) => {
+                if (input instanceof HTMLInputElement) {
+                    input.value = "";
+                }
+            });
+        });
 }
 
 window.addEventListener("DOMContentLoaded", init);

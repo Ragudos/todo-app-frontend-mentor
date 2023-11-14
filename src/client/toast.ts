@@ -5,7 +5,7 @@ window.addEventListener("DOMContentLoaded", () => {
     mount_toaster({
         position: {
             x: "left",
-            y: "bottom"
-        }
+            y: "bottom",
+        },
     });
 });

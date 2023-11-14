@@ -2,7 +2,9 @@ import { Router } from "express";
 
 import changeThemeRoute from "./put/change-theme";
 import addTodoRoute from "./post/add-todo";
-import validationRoute from "./post/validate";
+import getTodoRoute from "./get-todos";
+import deleteTodoRoute from "./delete/delete-todo";
+import updateTodoRoute from "./put/update-todo";
 import { db } from "@/lib/db";
 import { todos } from "@/model/schema";
 
@@ -16,8 +18,6 @@ router.get("/", async (req, res) => {
     try {
         const listOfTodos = await db.select().from(todos);
 
-        console.log(listOfTodos);
-
         res.render("index", {
             preloadImages: isMobile
                 ? [
@@ -28,9 +28,44 @@ router.get("/", async (req, res) => {
                       "/assets/images/bg-desktop-dark.jpg",
                       "/assets/images/bg-desktop-light.jpg",
                   ],
-            todos: listOfTodos
+            todos:
+                listOfTodos.length == 0
+                    ? undefined
+                    : listOfTodos
+                          .sort((a, b) => {
+                              if (
+                                  a.creationDate!.getTime() >
+                                  b.creationDate!.getTime()
+                              ) {
+                                  return -1;
+                              }
+
+                              if (
+                                  a.creationDate!.getTime() <
+                                  b.creationDate!.getTime()
+                              ) {
+                                  return 1;
+                              }
+
+                              return 0;
+                          })
+                          .sort((a, b) => {
+                              if (a.isFinished && !b.isFinished) {
+                                  return -1;
+                              }
+
+                              if (b.isFinished && !a.isFinished) {
+                                  return 1;
+                              }
+
+                              return 0;
+                          }),
         });
     } catch (err) {
+        console.log("\n-- An error has occured --\n");
+        console.error(err);
+        console.log("\n-- --\n");
+
         res.status(500).render("error", {
             status: 500,
             preloadImages: isMobile
@@ -42,13 +77,16 @@ router.get("/", async (req, res) => {
                       "/assets/images/bg-desktop-dark.jpg",
                       "/assets/images/bg-desktop-light.jpg",
                   ],
-            message: "Something went wrong. Please contact the site owner if you are seeing this."
+            message:
+                "Something went wrong. Please contact the site owner if you are seeing this.",
         });
     }
 });
 
 router.use(changeThemeRoute);
 router.use(addTodoRoute);
-router.use(validationRoute);
+router.use(getTodoRoute);
+router.use(deleteTodoRoute);
+router.use(updateTodoRoute);
 
 export default router;

@@ -68,7 +68,7 @@ body {
 body {
     @include mixins.container;
 
-    padding-block: 2rem;
+    padding-block: 3.5rem;
     justify-content: center;
     min-height: 100dvh;
 
@@ -136,7 +136,8 @@ a {
     color: inherit;
 }
 
-button {
+button,
+input[type=submit] {
     cursor: pointer;
 }
 
@@ -236,6 +237,12 @@ a {
     &:active {
         opacity: 0.87;
     }
+}
+
+button:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: default;
 }
 
 .full-width {
@@ -409,12 +416,12 @@ input {
     font-family: inherit;
 }
 
-.strikethroguh {
+.strikethrough {
     text-decoration: line-through;
 }
 
 .finished-todo {
-    opacity: 0.5;
+    opacity: 0.25;
 }
 
 .unfinished-todo {
@@ -423,14 +430,14 @@ input {
     transition-duration: 250ms;
 
     &:hover {
-        color: hsl(236 9% 61%);
+        color: hsl(235 21% 11%);
     }
 }
 
-[date-theme=dark] {
+[data-theme=dark] {
     .unfinished-todo {
         &:hover {
-            color: hsl(236 39% 92%);
+            color: hsl(0 0% 98%);
         }
     }
 }
@@ -459,8 +466,11 @@ input {
     justify-content: flex-start;
 }
 
-.todo-checkmark {
+.todo-checkmark,
+input[type=submit] {
     border: 1px solid currentColor;
+
+    border-radius: 100%;
 
     opacity: 0.25;
 
@@ -472,6 +482,10 @@ input {
     height: 1.25rem;
 
     padding: 0.175rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover {
         opacity: 1;
@@ -483,13 +497,15 @@ input {
     padding: 1.5rem;
 }
 
-button.toggle-finished-todo[aria-checked=true] {
+.toggle-finished-todo > button[aria-checked=true] {
     .todo-checkmark {
         background-image: linear-gradient(
             40deg,
             hsl(192, 100%, 67%),
             hsl(280 87% 65%)
         );
+
+        opacity: 1 !important;
     }
 }
 
@@ -498,6 +514,48 @@ button.toggle-finished-todo[aria-checked=true] {
 }
 
 .toggle-finished-todo {
-    border-bottom: 1px solid currentColor;
+    border-bottom: 1px solid rgba(72, 75, 106, 0.25);
     border-radius: 0px;
+}
+
+[data-theme=dark] .toggle-finished-todo {
+    border-bottom: 1px solid rgba(202, 205, 232, 0.25);
+}
+
+.p-5 {
+    padding: 1.25rem;
+}
+
+.show-on-hover {
+    opacity: 0;
+
+    will-change: opacity;
+    transition-property: opacity;
+    transition-duration: 250ms;
+}
+
+.toggle-finished-todo:hover .show-on-hover {
+    opacity: 1;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.justify-end {
+    justify-content: flex-end;
+}
+
+.pl-12 {
+    padding-left: 3rem;
+}
+
+#create-new-todo {
+    input[type=submit] {
+        top: 0;
+        bottom: 0;
+        margin-block: auto;
+
+        left: 1.25rem;
+    }
 }

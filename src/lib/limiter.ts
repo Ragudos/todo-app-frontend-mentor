@@ -8,18 +8,13 @@ interface Options {
 let amountOfRequests = 0;
 let amountOfFailedRequests = 0;
 
-function shouldAddToLimit(
-    req: Request,
-    allowMethods: Request["method"][]
-) {
+function shouldAddToLimit(req: Request, allowMethods: Request["method"][]) {
     if (
-        (
-            req.path.startsWith("/client") ||
+        (req.path.startsWith("/client") ||
             req.path.startsWith("/styles") ||
             req.path.startsWith("/assets") ||
-            req.path.startsWith("/change-theme")
-        )
-        && allowMethods.includes(req.method)
+            req.path.startsWith("/change-theme")) &&
+        allowMethods.includes(req.method)
     ) {
         return false;
     }
@@ -27,36 +22,27 @@ function shouldAddToLimit(
     return true;
 }
 
-export function rateLimit({
-    interval
-}: Options) {
+export function rateLimit({ interval }: Options) {
     const oneMinute = 60 * 1000;
 
     if (interval < oneMinute) {
         interval = oneMinute;
     }
 
-    setInterval(
-        () => {
-            amountOfRequests = 0;
-            amountOfFailedRequests = 0;
-        },
-        interval
-    );
+    setInterval(() => {
+        amountOfRequests = 0;
+        amountOfFailedRequests = 0;
+    }, interval);
 
-    return function(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
+    return function (req: Request, res: Response, next: NextFunction) {
         if (shouldAddToLimit(req, ["GET", "POST", "DELETE", "PUT"])) {
             if (amountOfRequests >= requestLimit) {
                 res.status(429).render("error", {
                     status: 429,
-                    message: "The amount of requests received have exceeded the maximum. Since this is a side project, the limit is small. Please try again later."
+                    message:
+                        "The amount of requests received have exceeded the maximum. Since this is a side project, the limit is small. Please try again later.",
                 });
-    
+
                 return;
             }
 
@@ -65,7 +51,9 @@ export function rateLimit({
 
         if (amountOfFailedRequests >= failedRequestLimit) {
             if (req.method == "POST" || req.method == "DELETE") {
-                res.status(429).send("The amount of failed requests exceeded the maximum. Since this is a side project. the limit is small. Please try again later."); 
+                res.status(429).send(
+                    "The amount of failed requests exceeded the maximum. Since this is a side project. the limit is small. Please try again later."
+                );
             } else if (
                 !req.path.startsWith("/client") ||
                 !req.path.startsWith("/styles") ||
@@ -74,15 +62,16 @@ export function rateLimit({
             ) {
                 res.status(429).render("error", {
                     status: 429,
-                    message: "The amount of failed requests received have exceeded the maximum. Since this is a side project, the limit is small. Please try again later."
+                    message:
+                        "The amount of failed requests received have exceeded the maximum. Since this is a side project, the limit is small. Please try again later.",
                 });
             }
 
             return;
         }
-    
+
         next();
-    }
+    };
 }
 
 export function incrementAmountOfFailedRequests() {

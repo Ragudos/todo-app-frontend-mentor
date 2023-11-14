@@ -53,9 +53,11 @@ app.use(
         immutable: process.env.NODE_ENV == "production",
     })
 );
-app.use(rateLimit({
-    interval: 60 * 1000
-}));
+app.use(
+    rateLimit({
+        interval: 60 * 1000,
+    })
+);
 
 app.engine(
     "cjs",
@@ -79,9 +81,10 @@ app.engine(
                       title: siteConfig.title,
                       description: siteConfig.description,
                   } as RenderOptions["openGraph"]),
-            timeStamp: process.env.NODE_ENV != "production"
-                ? getTimestampForCacheBusting()
-                : undefined,
+            timeStamp:
+                process.env.NODE_ENV != "production"
+                    ? getTimestampForCacheBusting()
+                    : undefined,
         });
 
         callback(null, content);

@@ -3,7 +3,6 @@ import postgres from "postgres";
 
 const connectionString = process.env.DB_URL;
 
-
 if (!connectionString) {
     console.error(
         "Database URL not found. Please add it as an environment variable."

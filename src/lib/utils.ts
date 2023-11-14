@@ -36,13 +36,23 @@ export function parseCookie(cookieStr: string): Record<string, string> {
     return parsedCookie;
 }
 
-export function getTimestampForCacheBusting() {
+export function getTimestampForCacheBusting(
+    shoudGetNewTimeStamp: boolean = true
+) {
     if (process.env.NODE_ENV != "production") {
-        timeStamp = Date.now();
+        if (shoudGetNewTimeStamp) {
+            timeStamp = Date.now();
+        }
     } else {
         if (!timeStamp || Date.now() - timeStamp == 1000 * 60 * 60) {
-            timeStamp = Date.now();
-            console.log(`New time stamp for assets at ${timeStamp} milliseconds. On ${new Date(timeStamp)}`);    
+            if (shoudGetNewTimeStamp) {
+                timeStamp = Date.now();
+                console.log(
+                    `New time stamp for assets at ${timeStamp} milliseconds. On ${new Date(
+                        timeStamp
+                    )}`
+                );
+            }
         }
     }
 

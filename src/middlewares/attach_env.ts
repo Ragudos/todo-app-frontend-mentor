@@ -5,9 +5,8 @@ export function attachEnvToClient(
     res: Response,
     next: NextFunction
 ) {
-
     res.locals.ENV = {
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV: process.env.NODE_ENV,
     };
 
     next();

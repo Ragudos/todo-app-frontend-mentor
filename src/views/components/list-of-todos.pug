@@ -1,0 +1,97 @@
+if (todos)
+    each todo in todos 
+        if (todo.isFinished)
+            .p-5.justify-start.flex.gap-4.items-center.w-full.toggle-finished-todo(
+                id="todo-" + todo.id
+            )
+                button.gap-4(
+                    aria-checked="true",
+                    type="button",
+                    hx-put="/update-todo?todoId=" + todo.id + "&isFinished=" + !todo.isFinished,
+                    hx-trigger="click",
+                    hx-swap="none",
+                    data-disableonclick,
+                    hx-indicator="#loading-indicator"
+                )
+                    .icon.rounded-full.todo-checkmark(
+                        aria-label="Indicator whether a todo is finished or not. Click to toggle."
+                    )
+                        if (timeStamp)
+                            img(
+                                src="/assets/images/icon-check.svg?t=" + timeStamp,
+                                alt="Check Icon",
+                                width="11",
+                                height="9"
+                            )
+                        else
+                            img(
+                                src="/assets/images/icon-check.svg",
+                                alt="Check Icon",
+                                width="11",
+                                height="9"
+                            )
+                    .strikethrough.finished-todo(
+                        aria-label="This todo is finished"
+                    ) #{ todo.content }
+                .flex-1.flex.justify-end.items-center
+                    button.show-on-hover(
+                        hx-delete="/delete-todo?todoId=" + todo.id,
+                        hx-swap="none",
+                        type="button",
+                        aria-label="Click to delete this todo"
+                    )
+                        if (timeStamp)
+                            img(
+                                src="/assets/images/icon-cross.svg?t=" + timeStamp,
+                                alt="Close Icon in the form of X",
+                                width="18",
+                                height="18"
+                            )
+                        else
+                            img(
+                                src="/assets/images/icon-cross.svg",
+                                alt="Close Icon in the form of X",
+                                width="18",
+                                height="18"
+                            )
+        else
+            .p-5.flex.gap-4.items-center.justify-start.w-full.toggle-finished-todo(
+                id="todo-" + todo.id
+            )
+                button.gap-4(
+                    type="button",
+                    hx-put="/update-todo?todoId=" + todo.id + "&isFinished=" + !todo.isFinished,
+                    hx-trigger="click",
+                    hx-swap="none",
+                    data-disableonclick,
+                    hx-indicator="#loading-indicator"
+                )
+                    .icon.rounded-full.todo-checkmark(
+                        aria-label="Indicator whether a todo is finished or not. Click to toggle."
+                    )
+                    .unfinished-todo(
+                        aria-label="This todo is not yet finished"
+                    ) #{ todo.content }
+                .flex-1.flex.justify-end.items-center
+                    button.show-on-hover(
+                        hx-delete="/delete-todo?todoId=" + todo.id,
+                        hx-swap="none",
+                        type="button",
+                        aria-label="Click to delete this todo"
+                    )
+                        if (timeStamp)
+                            img(
+                                src="/assets/images/icon-cross.svg?t=" + timeStamp,
+                                alt="Close Icon in the form of X",
+                                width="18",
+                                height="18"
+                            )
+                        else
+                            img(
+                                src="/assets/images/icon-cross.svg",
+                                alt="Close Icon in the form of X",
+                                width="18",
+                                height="18"
+                            )
+else
+    .p-5.w-full(style="opacity: 0.5; font-size: 0.875em") There are no todos right now. Create one?

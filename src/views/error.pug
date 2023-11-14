@@ -1,12 +1,12 @@
 extends scaffold/layout.pug
 
 block metadata
-    meta(name="robots" content="noindex nofollow")
+    meta(name="robots", content="noindex nofollow")
 
 block content
     include components/background.pug
 
     main.contained.grid.place-items-center
-        div.flex.flex-col.gap-2.items-center(style="text-align: center;")
-            h1 Something went wrong. #{status}
-            p(style="font-size: 1.175em;") #{message}
+        .flex.flex-col.gap-2.items-center(style="text-align: center")
+            h1 Something went wrong. #{ status }
+            p(style="font-size: 1.175em") #{ message }

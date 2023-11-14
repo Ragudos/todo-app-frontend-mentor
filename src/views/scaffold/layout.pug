@@ -1,10 +1,7 @@
 doctype html
-html(data-theme=locals.theme lang="en" data-env=locals.ENV.NODE_ENV) 
+html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV) 
     head
-        meta(
-            name="viewport"
-            content="width=device-width,initial-scale=1"
-        )
+        meta(name="viewport", content="width=device-width,initial-scale=1")
         link(rel="preconnect", href="https://fonts.googleapis.com")
         link(
             rel="preconnect",
@@ -19,8 +16,26 @@ html(data-theme=locals.theme lang="en" data-env=locals.ENV.NODE_ENV)
         title= title
 
         include metadata.pug
-        
+
         if (timeStamp)
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="style",
+                href="/styles/resets.css?t=" + timeStamp
+            )
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="style",
+                href="/styles/loading.css?t=" + timeStamp
+            )
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="script",
+                href="/client/htmx.mjs?t=" + timeStamp
+            )
             link(
                 nonce=locals.cspNonce,
                 rel="stylesheet",
@@ -48,7 +63,25 @@ html(data-theme=locals.theme lang="en" data-env=locals.ENV.NODE_ENV)
                 defer,
                 src="/client/htmx.mjs?t=" + timeStamp
             )
-        else 
+        else
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="style",
+                href="/styles/resets.css"
+            )
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="style",
+                href="/styles/loading.css"
+            )
+            link(
+                nonce=locals.cspNonce,
+                rel="prefetch",
+                as="script",
+                href="/client/htmx.mjs"
+            )
             link(
                 nonce=locals.cspNonce,
                 rel="stylesheet",
@@ -81,10 +114,14 @@ html(data-theme=locals.theme lang="en" data-env=locals.ENV.NODE_ENV)
         if (preloadImages)
             each val in preloadImages
                 if (timeStamp)
-                    link(rel="preload", as="image", href=val + "?t=" + timeStamp)
-                else 
+                    link(
+                        rel="preload",
+                        as="image",
+                        href=val + "?t=" + timeStamp
+                    )
+                else
                     link(rel="preload", as="image", href=val)
     body
-        div#loading-indicator.htmx-indicator
-            div.loading-spinner
+        #loading-indicator.htmx-indicator
+            .loading-spinner
         block content

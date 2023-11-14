@@ -14,13 +14,14 @@ block content
                             name="changeTheme",
                             hx-put="/change-theme/light",
                             hx-trigger="click",
-                            hx-swap="none",
+                            hx-swap="none"
                         )
                             img(
-                                src="/assets/images/icon-sun.svg?=" + timeStamp
-                                alt="Sun Icon"
-                                width="26"
-                                height="26"
+                                src="/assets/images/icon-sun.svg?=" + timeStamp,
+                                alt="Sun Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
                             )
                     if (!locals.theme || locals.theme == "system" || locals.theme == "light")
                         button.show-on-light.icon(
@@ -28,13 +29,14 @@ block content
                             name="changeTheme",
                             hx-put="/change-theme/dark",
                             hx-trigger="click",
-                            hx-swap="none",
+                            hx-swap="none"
                         )
                             img(
-                                src="/assets/images/icon-moon.svg?=" + timeStamp
-                                alt="Moon Icon"
-                                width="26"
-                                height="26"
+                                src="/assets/images/icon-moon.svg?=" + timeStamp,
+                                alt="Moon Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
                             )
                 else
                     if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
@@ -43,13 +45,14 @@ block content
                             name="changeTheme",
                             hx-put="/change-theme/light",
                             hx-trigger="click",
-                            hx-swap="none",
+                            hx-swap="none"
                         )
                             img(
-                                src="/assets/images/icon-sun.svg"
-                                alt="Sun Icon"
-                                width="26"
-                                height="26"
+                                src="/assets/images/icon-sun.svg",
+                                alt="Sun Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
                             )
                     if (!locals.theme || locals.theme == "system" || locals.theme == "light")
                         button.show-on-light.icon(
@@ -57,77 +60,47 @@ block content
                             name="changeTheme",
                             hx-put="/change-theme/dark",
                             hx-trigger="click",
-                            hx-swap="none",
+                            hx-swap="none"
                         )
                             img(
-                                src="/assets/images/icon-moon.svg"
-                                alt="Moon Icon"
-                                width="26"
-                                height="26"
+                                src="/assets/images/icon-moon.svg",
+                                alt="Moon Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
                             )
-        form(
-            aria-label="A form to create a new todo"
-            method="POST"
-            hx-post="/add-todo"
-            hx-trigger="submit"
-            hx-indicator="#loading-indicator"
-            id="create-new-todo"
-            style="margin-block: 1.25rem;"
+        form#create-new-todo.relative(
+            aria-label="A form to create a new todo",
+            method="POST",
+            hx-post="/add-todo",
+            hx-trigger="submit",
+            hx-indicator="#loading-indicator",
+            hx-swap="none",
+            style="margin-block: 1.25rem"
         )
-            label.cursor-text.w-full.p-4.focus-within.bg-card.shadow-lg.rounded-sm.flex(
+            input.absolute(
+                type="submit",
+                value="",
+                title="Create Todo",
+                aria-label="Create Todo"
+            )
+            label.cursor-text.w-full.p-5.pl-12.focus-within.bg-card.shadow-lg.rounded-sm.flex(
                 for="new-todo-input"
             )
-                input.w-full.no-focus(
-                    id="new-todo-input"
-                    name="todo"
-                    type="text"
-                    required
-                    minLength="5"
-                    hx-sync="closest form:abort"
+                input#new-todo-input.w-full.no-focus(
+                    name="todo",
+                    type="text",
+                    required,
+                    minLength="5",
                     placeholder="Create a new todo..."
                 )
-        div.flex.flex-col-rounded-sm.shadow-lg.bg-card.rounded-sm.overflow-hidden
-            section.overflow-y-auto.flex.flex-col.shadow-none.w-full
+        .flex.flex-col-rounded-sm.shadow-lg.bg-card.rounded-sm.overflow-hidden
+            section.shadow-none.w-full
                 h2.sr-only Section of todos
-                if (todos)
-                    each todo in todos 
-                        if (todo.isFinished)
-                            button.p-6.justify-start.flex.gap-4.items-center.w-full.toggle-finished-todo(
-                                aria-checked=true
-                                type="button"
-                                hx-put="/update-todo?todoId=" + todo.id + "&isFinished=" + !todo.isFinished
-                                hx-trigger="click"
-                                aria-label="Indicator whether a todo is finished or not. Click to toggle."
-                                id="todo-" + todo.id
-                            )
-                                div.icon.rounded-full.todo-checkmark
-                                    if (timeStamp)
-                                        img(
-                                            src="/assets/images/icon.check.svg?t=" + timeStamp
-                                            alt="Check Icon"
-                                            width="11"
-                                            height="9"
-                                        )
-                                    else
-                                        img(
-                                            src="/assets/images/icon.check.svg"
-                                            alt="Check Icon"
-                                            width="11"
-                                            height="9"
-                                        )
-                                div.strikethrough.finished-todo(
-                                    aria-label="This todo is finished"
-                                ) #{todo.content}
-                        else 
-                            button.p-6.flex.gap-4.items-center.justify-start.w-full.toggle-finished-todo(
-                                type="button"
-                                hx-put="/update-todo?todoId=" + todo.id + "&isFinished=" + !todo.isFinished
-                                hx-trigger="click"
-                                aria-label="Indicator whether a todo is finished or not. Click to toggle."
-                                id="todo-" + todo.id
-                            )
-                                div.icon.rounded-full.todo-checkmark
-                                div.unfinished-todo(
-                                    aria-label="This todo is finished"
-                                ) #{todo.content}
-
+                .overflow-y-auto.flex.flex-col.w-full(
+                    hx-get="/get-todos",
+                    hx-trigger="newTodo from:body, deleteTodo from:body, updateTodo from:body",
+                    hx-include="[name=\"filter-todo-button\"]",
+                    hx-indicator="#loading-indicator"
+                )
+                    include components/list-of-todos.pug
