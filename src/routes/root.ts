@@ -6,6 +6,7 @@ import getTodoRoute from "./get-todos";
 import deleteTodoRoute from "./delete/delete-todo";
 import updateTodoRoute from "./put/update-todo";
 import updateFilterRoute from "./put/update-filter";
+import deleteCompletedTodosRoute from "./delete/delete-completed";
 import { db } from "@/lib/db";
 import { filterTodoValues, filters, todos } from "@/model/schema";
 import { eq } from "drizzle-orm";
@@ -147,5 +148,6 @@ router.use(getTodoRoute);
 router.use(deleteTodoRoute);
 router.use(updateTodoRoute);
 router.use(updateFilterRoute);
+router.use(deleteCompletedTodosRoute);
 
 export default router;

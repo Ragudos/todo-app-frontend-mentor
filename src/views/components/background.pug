@@ -1,5 +1,5 @@
 if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
-    .background.show-on-dark
+    .background.show-on-dark(aria-hidden="true")
         picture
             if (timeStamp)
                 source(
@@ -14,6 +14,7 @@ if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
                     loading="eager",
                     width="1440",
                     height="300"
+                    src="/assets/images/bg-desktop-dark.jpg?t=" + timeStamp
                 )
             else
                 source(
@@ -28,9 +29,10 @@ if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
                     loading="eager",
                     width="1440",
                     height="300"
+                    src="/assets/images/bg-desktop-dark.jpg"
                 )
 if (!locals.theme || locals.theme == "system" || locals.theme == "light")
-    .background.show-on-light
+    .background.show-on-light(aria-hidden="true")
         picture
             if (timeStamp)
                 source(
@@ -40,13 +42,12 @@ if (!locals.theme || locals.theme == "system" || locals.theme == "light")
                 img(
                     alt="Background Image",
                     sizes="(min-width: 768px) 768px, 375px",
-                    if,
-                    (timeStamp),
                     srcset="/assets/images/bg-desktop-light.jpg?t=" + timeStamp + " 768w, /assets/images/bg-mobile-light.jpg?t=" + timeStamp + " 375w",
                     style="background-image: url(/assets/images/bg-mobile-light.jpg?t=" + timeStamp + ");  aspect-ratio: 16/9;",
                     loading="eager",
                     width="1440",
                     height="300"
+                    src="/assets/images/bg-desktop-light.jpg?t=" + timeStamp
                 )
             else
                 source(
@@ -61,4 +62,5 @@ if (!locals.theme || locals.theme == "system" || locals.theme == "light")
                     loading="eager",
                     width="1440",
                     height="300"
+                    src="/assets/images/bg-desktop-light.jpg"
                 )

@@ -21,19 +21,19 @@ html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV)
         if (timeStamp)
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="style",
                 href="/styles/resets.css?t=" + timeStamp
             )
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="style",
                 href="/styles/loading.css?t=" + timeStamp
             )
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="script",
                 href="/client/htmx.mjs?t=" + timeStamp
             )
@@ -67,19 +67,19 @@ html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV)
         else
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="style",
                 href="/styles/resets.css"
             )
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="style",
                 href="/styles/loading.css"
             )
             link(
                 nonce=locals.cspNonce,
-                rel="prefetch",
+                rel="preload",
                 as="script",
                 href="/client/htmx.mjs"
             )
