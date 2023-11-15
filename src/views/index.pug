@@ -1,0 +1,147 @@
+extends scaffold/layout.pug
+
+block content
+    include components/background.pug
+
+    main.contained(style="width: 100%")
+        .text-white.flex.justify-between.gap-4.flex-wrap.items-center
+            h1.tracking-wide TODO
+            div(style="width: fit-content; height: fit-content")
+                if (timeStamp)
+                    if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
+                        button.show-on-dark.icon(
+                            aria-label="Toggle Light Theme",
+                            name="changeTheme",
+                            hx-put="/change-theme/light",
+                            hx-trigger="click",
+                            hx-swap="none"
+                        )
+                            img(
+                                src="/assets/images/icon-sun.svg?=" + timeStamp,
+                                alt="Sun Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
+                            )
+                    if (!locals.theme || locals.theme == "system" || locals.theme == "light")
+                        button.show-on-light.icon(
+                            aria-label="Toggle Dark Theme",
+                            name="changeTheme",
+                            hx-put="/change-theme/dark",
+                            hx-trigger="click",
+                            hx-swap="none"
+                        )
+                            img(
+                                src="/assets/images/icon-moon.svg?=" + timeStamp,
+                                alt="Moon Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
+                            )
+                else
+                    if (!locals.theme || locals.theme == "system" || locals.theme == "dark")
+                        button.show-on-dark.icon(
+                            aria-label="Toggle Light Theme",
+                            name="changeTheme",
+                            hx-put="/change-theme/light",
+                            hx-trigger="click",
+                            hx-swap="none"
+                        )
+                            img(
+                                src="/assets/images/icon-sun.svg",
+                                alt="Sun Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
+                            )
+                    if (!locals.theme || locals.theme == "system" || locals.theme == "light")
+                        button.show-on-light.icon(
+                            aria-label="Toggle Dark Theme",
+                            name="changeTheme",
+                            hx-put="/change-theme/dark",
+                            hx-trigger="click",
+                            hx-swap="none"
+                        )
+                            img(
+                                src="/assets/images/icon-moon.svg",
+                                alt="Moon Icon",
+                                width="26",
+                                height="26",
+                                loading="eager"
+                            )
+        form#create-new-todo.relative(
+            aria-label="A form to create a new todo",
+            hx-post="/add-todo",
+            hx-trigger="submit",
+            hx-indicator="#loading-indicator",
+            hx-swap="none",
+            style="margin-block: 1.25rem"
+        )
+            input.absolute(
+                type="submit",
+                value="",
+                title="Create Todo",
+                aria-label="Create Todo"
+            )
+            label.cursor-text.w-full.p-5.pl-12.focus-within.bg-card.shadow-lg.rounded-sm.flex(
+                for="new-todo-input"
+            )
+                input#new-todo-input.w-full.no-focus(
+                    name="todo",
+                    type="text",
+                    required,
+                    minLength="5",
+                    placeholder="Create a new todo..."
+                )
+        .flex.flex-col.rounded-sm.shadow-lg.bg-card.rounded-sm
+            section.shadow-none.w-full
+                h2.sr-only Section of todos
+                #section-of-todos.overflow-y-auto.flex.flex-col.w-full.section-of-todos.justify-end.relative(
+                    hx-get="/get-todos",
+                    hx-trigger="newTodo from:body, deleteTodo from:body, updateTodo from:body, updateFilter from:body",
+                    hx-indicator="#loading-indicator"
+                )
+                    include components/list-of-todos.pug
+            .flex.justify-between.gap-2.items-center.p-4.shadow-none
+                if (filterValue.toLowerCase() == "all")
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } items left
+                else if (filterValue.toLowerCase() == "active")
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } todos left to be done
+                else
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } completed todos
+                form#filter-todos-form.flex.gap-2.items-center(
+                    aria-label="List of filter buttons",
+                    hx-put="/update-filter",
+                    hx-indicator="#loading-indicator"
+                )
+                    each btnText in ["all", "active", "completed"]
+                        if (btnText.toLowerCase() == filterValue.toLowerCase())
+                            button(
+                                type="submit",
+                                value=btnText,
+                                name="active-filter-todo-button",
+                                aria-label="Show " + btnText + " Todos",
+                                aria-checked,
+                                style="opacity: 1; font-size: inherit",
+                                disabled
+                            ) #{ btnText[0].toUpperCase() + btnText.slice(1) }
+                        else
+                            button(
+                                type="submit",
+                                value=btnText,
+                                name="newFilterValue",
+                                style="font-size: inherit",
+                                aria-label="Show " + btnText + " Todos"
+                            ) #{ btnText[0].toUpperCase() + btnText.slice(1) }
+                button.clear-completed-btn(
+                    type="button",
+                    hx-trigger="click",
+                    hx-delete="/delete-completed"
+                ) Clear Completed
+                

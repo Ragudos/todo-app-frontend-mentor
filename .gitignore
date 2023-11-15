@@ -1,0 +1,8 @@
+node_modules
+.env*
+prod-ca*
+build
+build/index.cjs
+build/views/index.cjs
+public/build*
+dev-build
