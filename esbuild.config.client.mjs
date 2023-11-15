@@ -17,7 +17,7 @@ try {
         format: "esm",
         platform: "browser",
         entryPoints: [path.resolve(__dirname, "./src/client/*.ts")],
-        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./build"),
+        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./public/build"),
         entryNames: "[dir]/client/[name]",
         outExtension: {
             ".js": ".mjs"
@@ -30,7 +30,7 @@ try {
     if (isWatch) {
         ctx.watch();
     } else {
-        fs.writeFileSync(path.resolve(__dirname, "./build/client.meta.json"), JSON.stringify(ctx.metafile));
+        fs.writeFileSync(path.resolve(__dirname, "./public/build/client.meta.json"), JSON.stringify(ctx.metafile));
     }
 } catch (err) {
     console.error(err);

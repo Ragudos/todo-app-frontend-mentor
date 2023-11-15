@@ -20,7 +20,7 @@ try {
         format: "esm",
         platform: "node",
         entryPoints: [path.resolve(__dirname, "./src/styles/*.scss")],
-        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./build"),
+        outdir: path.resolve(__dirname, isWatch ? "./dev-build" : "./public/build"),
         entryNames: "[dir]/styles/[name]",
         plugins: [
             sassPlugin({
@@ -44,7 +44,7 @@ try {
     if (isWatch) {
         ctx.watch();
     } else {
-        fs.writeFileSync(path.resolve(__dirname, "./build/css.meta.json"), JSON.stringify(ctx.metafile));
+        fs.writeFileSync(path.resolve(__dirname, "./public/build/css.meta.json"), JSON.stringify(ctx.metafile));
     }
 } catch (err) {
     console.error(err);

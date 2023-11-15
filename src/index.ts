@@ -33,20 +33,35 @@ app.use(cleanUrlMiddleware);
 app.use(cspMiddleware);
 app.use(attachEnvToClient);
 app.use(compression());
-app.use(
-    "/styles",
-    express.static(__dirname + "/styles", {
-        maxAge: cacheTime,
-        immutable: process.env.NODE_ENV == "production",
-    })
-);
-app.use(
-    "/client",
-    express.static(__dirname + "/client", {
-        maxAge: cacheTime,
-        immutable: process.env.NODE_ENV == "production",
-    })
-);
+if (process.env.NODE_ENV == "development") {
+    app.use(
+        "/styles",
+        express.static(__dirname + "/styles", {
+            maxAge: cacheTime,
+        })
+    );
+    app.use(
+        "/client",
+        express.static(__dirname + "/client", {
+            maxAge: cacheTime,
+        })
+    );
+} else {
+    app.use(
+        "/styles",
+        express.static("public/styles", {
+            maxAge: cacheTime,
+            immutable: true
+        })
+    );
+    app.use(
+        "/client",
+        express.static("public/client", {
+            maxAge: cacheTime,
+            immutable: true
+        })
+    );
+}
 app.use(
     express.static("public", {
         maxAge: cacheTime,
