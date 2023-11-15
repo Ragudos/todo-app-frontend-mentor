@@ -6,17 +6,16 @@ if (todos)
                 data-active="true"
             )
                 button.gap-4(
-                    aria-checked="true",
+                    aria-current="true",
                     type="button",
                     hx-put="/update-todo?todoId=" + todo.id + "&isFinished=" + !todo.isFinished,
                     hx-trigger="click",
                     hx-swap="none",
                     data-disableonclick,
                     hx-indicator="#loading-indicator"
+                    aria-label="Indicator whether a todo is finished or not. Click to toggle."
                 )
-                    .icon.rounded-full.todo-checkmark(
-                        aria-label="Indicator whether a todo is finished or not. Click to toggle."
-                    )
+                    .icon.rounded-full.todo-checkmark()
                         if (timeStamp)
                             img(
                                 src="/assets/images/icon-check.svg?t=" + timeStamp,
@@ -66,10 +65,9 @@ if (todos)
                     hx-swap="none",
                     data-disableonclick,
                     hx-indicator="#loading-indicator"
+                    aria-label="Indicator whether a todo is finished or not. Click to toggle."
                 )
-                    .icon.rounded-full.todo-checkmark(
-                        aria-label="Indicator whether a todo is finished or not. Click to toggle."
-                    )
+                    .icon.rounded-full.todo-checkmark
                     .unfinished-todo(
                         aria-label="This todo is not yet finished"
                     ) #{ todo.content }

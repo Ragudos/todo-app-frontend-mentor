@@ -457,6 +457,14 @@ input {
     }
 }
 
+[data-theme=system] {
+    .unfinished-todo {
+        &:hover {
+            color: hsl(0 0% 98%);
+        }
+    }
+}
+
 .rounded-full {
     border-radius: 50%;
 }
@@ -512,7 +520,7 @@ input[type=submit] {
     padding: 1.5rem;
 }
 
-.toggle-finished-todo > button[aria-checked=true] {
+.toggle-finished-todo > button[aria-current=true] {
     .todo-checkmark {
         background-image: linear-gradient(
             40deg,
@@ -594,12 +602,12 @@ button[name="active-filter-todo-button"] {
     button {
         font-size: 0.75rem;
 
-        &:hover:not([aria-checked]) {
+        &:hover:not([aria-current]) {
             opacity: 1;
         }
     }
 
-    button:not([aria-checked]) {
+    button:not([aria-current]) {
         opacity: 0.5;
 
         will-change: opacity;

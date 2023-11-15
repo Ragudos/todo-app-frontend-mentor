@@ -48,7 +48,7 @@ router.put("/update-filter", async (req, res) => {
                      value="${value}"
                      name="active-filter-todo-button"
                      aria-label="Show ${value} Todos"
-                     aria-checked="true"
+                     aria-current="true"
                      style="opacity: 1; font-size: inherit;"
                      disabled   
                   >

@@ -116,7 +116,7 @@ router.get("/get-todos", async (req, res, _next) => {
                             }&isFinished=${!item.isFinished}"
                             data-disableonclick
                             hx-indicator="#loading-indicator"
-                            ${item.isFinished ? 'aria-checked="true"' : ""}    
+                            ${item.isFinished ? 'aria-current="true"' : ""}    
                         >
                             <div
                                 class="icon rounded-full todo-checkmark"
