@@ -7,38 +7,42 @@ import { Router } from "express";
 const router = Router();
 
 router.put("/update-filter", async (req, res) => {
-   let newFilterValue = req.body.newFilterValue;
-   const activeFilterValue = req.body["active-filter-todo-button"];
+    let newFilterValue = req.body.newFilterValue;
+    const activeFilterValue = req.body["active-filter-todo-button"];
 
-   if (activeFilterValue) {
-      res.status(204).send("");
+    if (activeFilterValue) {
+        res.status(204).send("");
 
-      return;
-   }
+        return;
+    }
 
-   if (!newFilterValue) {
-      res.status(400).send("Invalid filter value");
+    if (!newFilterValue) {
+        res.status(400).send("Invalid filter value");
 
-      return;
-   } else {
-      newFilterValue = cleanInput(newFilterValue.toLowerCase().trim());
+        return;
+    } else {
+        newFilterValue = cleanInput(newFilterValue.toLowerCase().trim());
 
-      if (!filterTodoValues.enumValues.includes(newFilterValue)) {
+        if (!filterTodoValues.enumValues.includes(newFilterValue)) {
             res.status(400).send("Invalid filter value");
-      
+
             return;
-         }
-   }
+        }
+    }
 
-   try {
-      await db.update(filters).set({ value: newFilterValue }).where(eq(filters.key, "filterTodo"));
-   
-      res.setHeader("HX-Trigger", "updateFilter");
+    try {
+        await db
+            .update(filters)
+            .set({ value: newFilterValue })
+            .where(eq(filters.key, "filterTodo"));
 
-      res.send(
-         filterTodoValues.enumValues.map((value) => {
-            if (value == newFilterValue) {
-               return `
+        res.setHeader("HX-Trigger", "updateFilter");
+
+        res.send(
+            filterTodoValues.enumValues
+                .map((value) => {
+                    if (value == newFilterValue) {
+                        return `
                   <button
                      type="submit"
                      value="${value}"
@@ -51,9 +55,9 @@ router.put("/update-filter", async (req, res) => {
                      ${value[0].toUpperCase() + value.slice(1)}
                   </button>
                `.trim();
-            }
+                    }
 
-            return `
+                    return `
                <button
                   type="submit"
                   name="newFilterValue"
@@ -64,11 +68,12 @@ router.put("/update-filter", async (req, res) => {
                   ${value[0].toUpperCase() + value.slice(1)}
                </button>
             `.trim();
-         }).join(" ")
-      );
-   } catch (err) {
-      res.status(500).send("Something went wrong. Please try again.");
-   }
+                })
+                .join(" ")
+        );
+    } catch (err) {
+        res.status(500).send("Something went wrong. Please try again.");
+    }
 });
 
 export default router;

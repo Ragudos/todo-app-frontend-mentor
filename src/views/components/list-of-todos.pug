@@ -2,7 +2,7 @@ if (todos)
     each todo in todos 
         if (todo.isFinished)
             .p-4.justify-between.flex.gap-4.items-center.w-full.toggle-finished-todo(
-                id="todo-" + todo.id
+                id="todo-" + todo.id,
                 data-active="true"
             )
                 button.gap-4(
@@ -96,8 +96,17 @@ if (todos)
                             )
 else
     if (filterValue.toLowerCase() == "all")
-        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no todos right now. Create one?
+        .p-5.w-full(
+            data-type="empty-list-indicator",
+            style="opacity: 0.5; font-size: 0.875em"
+        ) There are no todos right now. Create one?
     else if (filterValue.toLowerCase() == "active")
-        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no active todos right now. Create one?
+        .p-5.w-full(
+            data-type="empty-list-indicator",
+            style="opacity: 0.5; font-size: 0.875em"
+        ) There are no active todos right now. Create one?
     else
-        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no completed todos. Check one to see it here.
+        .p-5.w-full(
+            data-type="empty-list-indicator",
+            style="opacity: 0.5; font-size: 0.875em"
+        ) There are no completed todos. Check one to see it here.

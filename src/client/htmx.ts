@@ -7,44 +7,57 @@ function init() {
         htmx.logAll();
     }
 
-    document.querySelector("#section-of-todos")?.addEventListener("htmx:afterOnLoad", (e) => {
-        console.log(e);
-        let amountOfItems = 0;
-        const activeFilterButton = document.querySelector("[name='active-filter-todo-button']")! as HTMLButtonElement;
-        const activeFilter = activeFilterButton.value;
-        const children = Array.from(document.querySelector("#section-of-todos")!.children);
-        const amountOfItemsLeftIndicator = document.querySelector("#amount-of-items-left")!;
+    document
+        .querySelector("#section-of-todos")
+        ?.addEventListener("htmx:afterOnLoad", (e) => {
+            console.log(e);
+            let amountOfItems = 0;
+            const activeFilterButton = document.querySelector(
+                "[name='active-filter-todo-button']"
+            )! as HTMLButtonElement;
+            const activeFilter = activeFilterButton.value;
+            const children = Array.from(
+                document.querySelector("#section-of-todos")!.children
+            );
+            const amountOfItemsLeftIndicator = document.querySelector(
+                "#amount-of-items-left"
+            )!;
 
-        if (children[0] instanceof HTMLElement) {
-            if (children[0].dataset.type == "empty-list-indicator") {
-                if (activeFilter.toLowerCase() == "completed") {
-                    amountOfItemsLeftIndicator.textContent = amountOfItems + " completed items";
+            if (children[0] instanceof HTMLElement) {
+                if (children[0].dataset.type == "empty-list-indicator") {
+                    if (activeFilter.toLowerCase() == "completed") {
+                        amountOfItemsLeftIndicator.textContent =
+                            amountOfItems + " completed items";
+                    } else {
+                        amountOfItemsLeftIndicator.textContent =
+                            amountOfItems + " items left";
+                    }
                 } else {
-                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
-                }
-            } else {
-                if (activeFilter.toLowerCase() == "completed") {
-                    amountOfItems = children.filter((item) => {
-                        return item.getAttribute("data-active") == "true";
-                    }).length;
+                    if (activeFilter.toLowerCase() == "completed") {
+                        amountOfItems = children.filter((item) => {
+                            return item.getAttribute("data-active") == "true";
+                        }).length;
 
-                    amountOfItemsLeftIndicator.textContent = amountOfItems + " completed items";
-                } else if (activeFilter.toLowerCase() == "all") {
-                    amountOfItems = children.filter((item) => {
-                        return item.getAttribute("data-active") != "true";
-                    }).length;
+                        amountOfItemsLeftIndicator.textContent =
+                            amountOfItems + " completed items";
+                    } else if (activeFilter.toLowerCase() == "all") {
+                        amountOfItems = children.filter((item) => {
+                            return item.getAttribute("data-active") != "true";
+                        }).length;
 
-                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
-                } else if (activeFilter.toLowerCase() == "active") {
-                    amountOfItems = children.filter((item) => {
-                        return item.getAttribute("data-active") != "true";
-                    }).length;
+                        amountOfItemsLeftIndicator.textContent =
+                            amountOfItems + " items left";
+                    } else if (activeFilter.toLowerCase() == "active") {
+                        amountOfItems = children.filter((item) => {
+                            return item.getAttribute("data-active") != "true";
+                        }).length;
 
-                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
+                        amountOfItemsLeftIndicator.textContent =
+                            amountOfItems + " items left";
+                    }
                 }
             }
-        }
-    });
+        });
 
     document.querySelectorAll("[data-disableonclick]").forEach((item) => {
         item.addEventListener("click", () => {

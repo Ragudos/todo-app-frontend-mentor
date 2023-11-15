@@ -11,8 +11,19 @@ router.get("/get-todos", async (req, res, _next) => {
     try {
         let filterBy = req.query.filterTodo;
 
-        if (!filterBy || !filterTodoValues.enumValues.includes(filterBy.toString() as "all" | "active" | "completed")) {
-            filterBy = (await db.selectDistinct().from(filters).where(eq(filters.key, "filterTodo")))[0]?.value || "all";
+        if (
+            !filterBy ||
+            !filterTodoValues.enumValues.includes(
+                filterBy.toString() as "all" | "active" | "completed"
+            )
+        ) {
+            filterBy =
+                (
+                    await db
+                        .selectDistinct()
+                        .from(filters)
+                        .where(eq(filters.key, "filterTodo"))
+                )[0]?.value || "all";
         }
 
         let listOfTodos: {
@@ -26,9 +37,15 @@ router.get("/get-todos", async (req, res, _next) => {
             filterBy = decodeURIComponent(filterBy.toLowerCase().trim());
 
             if (filterBy == "active") {
-                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, false));
+                listOfTodos = await db
+                    .select()
+                    .from(todos)
+                    .where(eq(todos.isFinished, false));
             } else if (filterBy == "completed") {
-                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, true));
+                listOfTodos = await db
+                    .select()
+                    .from(todos)
+                    .where(eq(todos.isFinished, true));
             } else {
                 listOfTodos = await db.select().from(todos);
             }
@@ -81,12 +98,13 @@ router.get("/get-todos", async (req, res, _next) => {
         res.setHeader("HX-Trigger", "todoListUpdated");
 
         res.send(
-            listOfTodos.map((item) => {
+            listOfTodos
+                .map((item) => {
                     return `
                     <div
                         class="p-4 justify-between flex gap-4 items-center w-full toggle-finished-todo"
                         id="todo-${item.id}"
-                        ${item.isFinished ? "data-active=\"true\"" : ""}
+                        ${item.isFinished ? 'data-active="true"' : ""}
                     >
                         <button
                             type="button"

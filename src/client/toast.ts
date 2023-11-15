@@ -52,24 +52,26 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     // @ts-expect-error
-    document.body.addEventListener("htmx:sendError", (e: { xhr: XMLHttpRequest }) => {
-        toast.error(
-            {
-                title: e.xhr.status.toString(),
-                message: e.xhr.responseText,
-            },
-            {
-                theme: document.documentElement.getAttribute("data-theme") as
-                    | "dark"
-                    | "light"
-                    | "system",
-                role: "alert",
-                style: "glass",
-                close_button: {
-                    is_shown_on_hover: false,
-                    position: "right",
+    document.body.addEventListener(
+        "htmx:sendError",
+        (e: { xhr: XMLHttpRequest }) => {
+            toast.error(
+                {
+                    title: e.xhr.status.toString(),
+                    message: e.xhr.responseText,
                 },
-            }
-        );
-    });
+                {
+                    theme: document.documentElement.getAttribute(
+                        "data-theme"
+                    ) as "dark" | "light" | "system",
+                    role: "alert",
+                    style: "glass",
+                    close_button: {
+                        is_shown_on_hover: false,
+                        position: "right",
+                    },
+                }
+            );
+        }
+    );
 });

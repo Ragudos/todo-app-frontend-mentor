@@ -104,49 +104,44 @@ block content
                     include components/list-of-todos.pug
             .flex.justify-between.gap-2.items-center.p-4.shadow-none
                 if (filterValue.toLowerCase() == "all")
-                    div(
-                        style="font-size: 0.75rem; opacity: 0.5;"
-                        id="amount-of-items-left"
-                    ) #{todoListUnfinishedLength} items left
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } items left
                 else if (filterValue.toLowerCase() == "active")
-                    div(
-                        style="font-size: 0.75rem; opacity: 0.5;"
-                        id="amount-of-items-left"
-                    ) #{todoListUnfinishedLength} todos left to be done
-                else 
-                    div(
-                        style="font-size: 0.75rem; opacity: 0.5;"
-                        id="amount-of-items-left"
-                    ) #{todoListUnfinishedLength} completed todos
-                form.flex.gap-2.items-center(
-                    aria-label="List of filter buttons"
-                    id="filter-todos-form"
-                    hx-put="/update-filter"
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } todos left to be done
+                else
+                    #amount-of-items-left(
+                        style="font-size: 0.75rem; opacity: 0.5"
+                    ) #{ todoListUnfinishedLength } completed todos
+                form#filter-todos-form.flex.gap-2.items-center(
+                    aria-label="List of filter buttons",
+                    hx-put="/update-filter",
                     hx-indicator="#loading-indicator"
                 )
                     each btnText in ["all", "active", "completed"]
                         if (btnText.toLowerCase() == filterValue.toLowerCase())
                             button(
-                                type="submit"
-                                value=btnText
-                                name="active-filter-todo-button"
-                                aria-label="Show " + btnText + " Todos"
-                                aria-checked=true
-                                style="opacity: 1; font-size: inherit;"
-                                disabled=true
-                            ) #{btnText[0].toUpperCase() + btnText.slice(1)}
+                                type="submit",
+                                value=btnText,
+                                name="active-filter-todo-button",
+                                aria-label="Show " + btnText + " Todos",
+                                aria-checked,
+                                style="opacity: 1; font-size: inherit",
+                                disabled
+                            ) #{ btnText[0].toUpperCase() + btnText.slice(1) }
                         else
                             button(
-                                type="submit"
-                                value=btnText
-                                name="newFilterValue"
-                                style="font-size: inherit;"
+                                type="submit",
+                                value=btnText,
+                                name="newFilterValue",
+                                style="font-size: inherit",
                                 aria-label="Show " + btnText + " Todos"
-                            ) #{btnText[0].toUpperCase() + btnText.slice(1)}
+                            ) #{ btnText[0].toUpperCase() + btnText.slice(1) }
                 button.clear-completed-btn(
-                    type="button"
-                    hx-trigger="click"
+                    type="button",
+                    hx-trigger="click",
                     hx-delete="/delete-completed"
                 ) Clear Completed
-
-                    
+                

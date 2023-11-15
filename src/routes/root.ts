@@ -20,30 +20,26 @@ router.get("/", async (req, res) => {
 
     if (res.locals.theme == "dark" || res.locals.theme == "light") {
         if (isMobile) {
-            preloadedImages = res.locals.theme == "dark"
-                ? [
-                    "/assets/images/bg-mobile-dark.jpg"
-                ] : [
-                    "/assets/images/bg-mobile-light.jpg"
-                ]
+            preloadedImages =
+                res.locals.theme == "dark"
+                    ? ["/assets/images/bg-mobile-dark.jpg"]
+                    : ["/assets/images/bg-mobile-light.jpg"];
         } else {
-            preloadedImages = res.locals.theme == "dark"
-                ? [
-                    "/assets/images/bg-desktop-dark.jpg"
-                ] : [
-                    "/assets/images/bg-mobile-dark.jpg"
-                ]
+            preloadedImages =
+                res.locals.theme == "dark"
+                    ? ["/assets/images/bg-desktop-dark.jpg"]
+                    : ["/assets/images/bg-mobile-light.jpg"];
         }
     } else {
         preloadedImages = isMobile
             ? [
-                "/assets/images/bg-mobile-dark.jpg",
-                "/assets/images/bg-mobile-light.jpg",
-            ]
+                  "/assets/images/bg-mobile-dark.jpg",
+                  "/assets/images/bg-mobile-light.jpg",
+              ]
             : [
-                "/assets/images/bg-desktop-dark.jpg",
-                "/assets/images/bg-desktop-light.jpg",
-            ]
+                  "/assets/images/bg-desktop-dark.jpg",
+                  "/assets/images/bg-desktop-light.jpg",
+              ];
     }
 
     let filterBy = req.query.filterTodo;
@@ -56,17 +52,34 @@ router.get("/", async (req, res) => {
             content: string | null;
         }[];
 
-        if (!filterBy || !filterTodoValues.enumValues.includes(filterBy.toString() as "all" | "active" | "completed")) {
-            filterBy = (await db.selectDistinct().from(filters).where(eq(filters.key, "filterTodo")))[0]?.value || "all";
+        if (
+            !filterBy ||
+            !filterTodoValues.enumValues.includes(
+                filterBy.toString() as "all" | "active" | "completed"
+            )
+        ) {
+            filterBy =
+                (
+                    await db
+                        .selectDistinct()
+                        .from(filters)
+                        .where(eq(filters.key, "filterTodo"))
+                )[0]?.value || "all";
         }
 
         if (filterBy && typeof filterBy == "string") {
             filterBy = decodeURIComponent(filterBy.toLowerCase().trim());
 
             if (filterBy == "active") {
-                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, false));
+                listOfTodos = await db
+                    .select()
+                    .from(todos)
+                    .where(eq(todos.isFinished, false));
             } else if (filterBy == "completed") {
-                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, true));
+                listOfTodos = await db
+                    .select()
+                    .from(todos)
+                    .where(eq(todos.isFinished, true));
             } else {
                 listOfTodos = await db.select().from(todos);
             }
@@ -85,7 +98,7 @@ router.get("/", async (req, res) => {
 
             return 0;
         });
-        
+
         listOfTodos.sort((a, b) => {
             if (a.isFinished && !b.isFinished) {
                 return -1;
@@ -100,14 +113,11 @@ router.get("/", async (req, res) => {
 
         res.render("index", {
             preloadImages: preloadedImages,
-            todos:
-                listOfTodos.length == 0
-                    ? undefined
-                    : listOfTodos,
+            todos: listOfTodos.length == 0 ? undefined : listOfTodos,
             todoListUnfinishedLength: listOfTodos.reduce((prev, curr) => {
                 return curr.isFinished ? prev : prev + 1;
             }, 0),
-            filterValue: filterBy
+            filterValue: filterBy,
         });
     } catch (err) {
         console.log("\n-- An error has occured --\n");
@@ -118,13 +128,13 @@ router.get("/", async (req, res) => {
             status: 500,
             preloadImages: isMobile
                 ? [
-                    "/assets/images/bg-mobile-dark.jpg",
-                    "/assets/images/bg-mobile-light.jpg",
-                ]
+                      "/assets/images/bg-mobile-dark.jpg",
+                      "/assets/images/bg-mobile-light.jpg",
+                  ]
                 : [
-                    "/assets/images/bg-desktop-dark.jpg",
-                    "/assets/images/bg-desktop-light.jpg",
-                ],
+                      "/assets/images/bg-desktop-dark.jpg",
+                      "/assets/images/bg-desktop-light.jpg",
+                  ],
             message:
                 "Something went wrong. Please try refreshing the page. If the issue persists, try to contact the site owner if you are seeing this.",
         });

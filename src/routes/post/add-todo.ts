@@ -12,14 +12,17 @@ router.post("/add-todo", validation, async (req, res) => {
         const allTodos = await db.select().from(todos);
 
         if (allTodos.length >= maxTableRows) {
-            res.status(403).send("The amount of todos allowed for this side project is " + maxTableRows);
+            res.status(403).send(
+                "The amount of todos allowed for this side project is " +
+                    maxTableRows
+            );
 
             return;
         }
 
         await db.insert(todos).values({
             isFinished: false,
-            content: cleanInput(req.body.todo)
+            content: cleanInput(req.body.todo),
         });
 
         res.setHeader("HX-Trigger", "newTodo");

@@ -49,16 +49,16 @@ if (process.env.NODE_ENV == "development") {
 } else {
     app.use(
         "/styles",
-        express.static("public/styles", {
+        express.static("public/build/styles", {
             maxAge: cacheTime,
-            immutable: true
+            immutable: true,
         })
     );
     app.use(
         "/client",
-        express.static("public/client", {
+        express.static("public/build/client", {
             maxAge: cacheTime,
-            immutable: true
+            immutable: true,
         })
     );
 }
