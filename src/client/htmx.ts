@@ -10,7 +10,6 @@ function init() {
     document
         .querySelector("#section-of-todos")
         ?.addEventListener("htmx:afterOnLoad", (e) => {
-            console.log(e);
             let amountOfItems = 0;
             const activeFilterButton = document.querySelector(
                 "[name='active-filter-todo-button']"

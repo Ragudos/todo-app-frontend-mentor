@@ -102,7 +102,7 @@ block content
                     hx-indicator="#loading-indicator"
                 )
                     include components/list-of-todos.pug
-            .flex.justify-between.gap-2.items-center.p-4.shadow-none
+            .flex.justify-between.gap-2.items-center.p-4.shadow-none.relative
                 if (filterValue.toLowerCase() == "all")
                     #amount-of-items-left(
                         style="font-size: 0.75rem; opacity: 0.5"
@@ -145,4 +145,5 @@ block content
                     hx-delete="/delete-completed"
                     hx-swap="none"
                 ) Clear Completed
+    footer
                 
