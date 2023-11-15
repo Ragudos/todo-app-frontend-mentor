@@ -15,14 +15,14 @@ router.delete("/delete-todo", async (req, res) => {
             return;
         }
 
-        await db.delete(todos).where(eq(todos.id, +id));
+        await db.delete(todos).where(eq(todos.id, id.toString()));
 
         res.setHeader("HX-Trigger", "deleteTodo");
         res.send("OK");
     } catch (err) {
         console.log("\n-- An error has occured --\n");
         console.error(err);
-        console.log("\n-- --\n");
+        console.log("\n-- End of error --\n");
 
         res.status(500).send("Internal Server Error.");
     }

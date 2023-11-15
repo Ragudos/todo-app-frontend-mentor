@@ -40,9 +40,7 @@ export function getTimestampForCacheBusting(
     shoudGetNewTimeStamp: boolean = true
 ) {
     if (process.env.NODE_ENV != "production") {
-        if (shoudGetNewTimeStamp) {
-            timeStamp = Date.now();
-        }
+        timeStamp = Date.now();
     } else {
         if (!timeStamp || Date.now() - timeStamp == 1000 * 60 * 60) {
             if (shoudGetNewTimeStamp) {

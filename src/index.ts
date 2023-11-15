@@ -100,16 +100,26 @@ const server = app.listen(+PORT, HOST, () => {
     console.log(`Application has started on ${HOST}:${PORT}`);
 });
 
+server.once("close", () => {
+    console.log("Application is shutting down...");
+});
+
 process.on("SIGINT", () => {
     server.close();
+
+    console.log("The process emitted the event -- SIGINT -- and is closed.");
 });
 
 process.on("SIGQUIT", () => {
     server.close();
+
+    console.log("The process emitted the event -- SIGQUIT -- and is closed.");
 });
 
 process.on("SIGTERM", () => {
     server.close();
+
+    console.log("The process emitted the event -- SIGTERM -- and is closed.");
 });
 
 app.use("/", rootRoute);

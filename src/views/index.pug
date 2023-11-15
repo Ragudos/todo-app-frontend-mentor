@@ -71,7 +71,6 @@ block content
                             )
         form#create-new-todo.relative(
             aria-label="A form to create a new todo",
-            method="POST",
             hx-post="/add-todo",
             hx-trigger="submit",
             hx-indicator="#loading-indicator",
@@ -94,13 +93,60 @@ block content
                     minLength="5",
                     placeholder="Create a new todo..."
                 )
-        .flex.flex-col-rounded-sm.shadow-lg.bg-card.rounded-sm.overflow-hidden
+        .flex.flex-col.rounded-sm.shadow-lg.bg-card.rounded-sm
             section.shadow-none.w-full
                 h2.sr-only Section of todos
-                .overflow-y-auto.flex.flex-col.w-full(
+                #section-of-todos.overflow-y-auto.flex.flex-col.w-full.section-of-todos.justify-end.relative(
                     hx-get="/get-todos",
-                    hx-trigger="newTodo from:body, deleteTodo from:body, updateTodo from:body",
-                    hx-include="[name=\"filter-todo-button\"]",
+                    hx-trigger="newTodo from:body, deleteTodo from:body, updateTodo from:body, updateFilter from:body",
                     hx-indicator="#loading-indicator"
                 )
                     include components/list-of-todos.pug
+            .flex.justify-between.gap-2.items-center.p-4.shadow-none
+                if (filterValue.toLowerCase() == "all")
+                    div(
+                        style="font-size: 0.75rem; opacity: 0.5;"
+                        id="amount-of-items-left"
+                    ) #{todoListUnfinishedLength} items left
+                else if (filterValue.toLowerCase() == "active")
+                    div(
+                        style="font-size: 0.75rem; opacity: 0.5;"
+                        id="amount-of-items-left"
+                    ) #{todoListUnfinishedLength} todos left to be done
+                else 
+                    div(
+                        style="font-size: 0.75rem; opacity: 0.5;"
+                        id="amount-of-items-left"
+                    ) #{todoListUnfinishedLength} completed todos
+                form.flex.gap-2.items-center(
+                    aria-label="List of filter buttons"
+                    id="filter-todos-form"
+                    hx-put="/update-filter"
+                    hx-indicator="#loading-indicator"
+                )
+                    each btnText in ["all", "active", "completed"]
+                        if (btnText.toLowerCase() == filterValue.toLowerCase())
+                            button(
+                                type="submit"
+                                value=btnText
+                                name="active-filter-todo-button"
+                                aria-label="Show " + btnText + " Todos"
+                                aria-checked=true
+                                style="opacity: 1; font-size: inherit;"
+                                disabled=true
+                            ) #{btnText[0].toUpperCase() + btnText.slice(1)}
+                        else
+                            button(
+                                type="submit"
+                                value=btnText
+                                name="newFilterValue"
+                                style="font-size: inherit;"
+                                aria-label="Show " + btnText + " Todos"
+                            ) #{btnText[0].toUpperCase() + btnText.slice(1)}
+                button.clear-completed-btn(
+                    type="button"
+                    hx-trigger="click"
+                    hx-delete="/delete-completed"
+                ) Clear Completed
+
+                    

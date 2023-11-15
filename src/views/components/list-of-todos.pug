@@ -1,8 +1,9 @@
 if (todos)
     each todo in todos 
         if (todo.isFinished)
-            .p-5.justify-start.flex.gap-4.items-center.w-full.toggle-finished-todo(
+            .p-4.justify-between.flex.gap-4.items-center.w-full.toggle-finished-todo(
                 id="todo-" + todo.id
+                data-active="true"
             )
                 button.gap-4(
                     aria-checked="true",
@@ -33,7 +34,7 @@ if (todos)
                     .strikethrough.finished-todo(
                         aria-label="This todo is finished"
                     ) #{ todo.content }
-                .flex-1.flex.justify-end.items-center
+                .flex.justify-end.items-center
                     button.show-on-hover(
                         hx-delete="/delete-todo?todoId=" + todo.id,
                         hx-swap="none",
@@ -55,7 +56,7 @@ if (todos)
                                 height="18"
                             )
         else
-            .p-5.flex.gap-4.items-center.justify-start.w-full.toggle-finished-todo(
+            .p-4.flex.gap-4.items-center.justify-between.w-full.toggle-finished-todo(
                 id="todo-" + todo.id
             )
                 button.gap-4(
@@ -72,7 +73,7 @@ if (todos)
                     .unfinished-todo(
                         aria-label="This todo is not yet finished"
                     ) #{ todo.content }
-                .flex-1.flex.justify-end.items-center
+                .flex.justify-end.items-center
                     button.show-on-hover(
                         hx-delete="/delete-todo?todoId=" + todo.id,
                         hx-swap="none",
@@ -94,4 +95,9 @@ if (todos)
                                 height="18"
                             )
 else
-    .p-5.w-full(style="opacity: 0.5; font-size: 0.875em") There are no todos right now. Create one?
+    if (filterValue.toLowerCase() == "all")
+        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no todos right now. Create one?
+    else if (filterValue.toLowerCase() == "active")
+        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no active todos right now. Create one?
+    else
+        .p-5.w-full(data-type="empty-list-indicator" style="opacity: 0.5; font-size: 0.875em") There are no completed todos. Check one to see it here.

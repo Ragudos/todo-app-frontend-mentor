@@ -1,61 +1,55 @@
 import * as htmx from "htmx.org";
-import { toast } from "@webdevaaron/vanilla-toast";
 
 window.htmx = htmx;
-
-interface ErrorEvent {
-    detail: {
-        boosted: undefined;
-        elt: HTMLElement;
-        error: string;
-        etc: Record<string, any>;
-        failed: boolean;
-        pathInfo: {
-            anchor: undefined;
-            finalRequestPath: string;
-            requestPath: string;
-            responsePath: string;
-        };
-        xhr: XMLHttpRequest;
-    };
-    srcElement: EventTarget | null;
-    type: string;
-    target: EventTarget | null;
-}
 
 function init() {
     if (document.documentElement.getAttribute("data-env") != "production") {
         htmx.logAll();
     }
 
+    document.querySelector("#section-of-todos")?.addEventListener("htmx:afterOnLoad", (e) => {
+        console.log(e);
+        let amountOfItems = 0;
+        const activeFilterButton = document.querySelector("[name='active-filter-todo-button']")! as HTMLButtonElement;
+        const activeFilter = activeFilterButton.value;
+        const children = Array.from(document.querySelector("#section-of-todos")!.children);
+        const amountOfItemsLeftIndicator = document.querySelector("#amount-of-items-left")!;
+
+        if (children[0] instanceof HTMLElement) {
+            if (children[0].dataset.type == "empty-list-indicator") {
+                if (activeFilter.toLowerCase() == "completed") {
+                    amountOfItemsLeftIndicator.textContent = amountOfItems + " completed items";
+                } else {
+                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
+                }
+            } else {
+                if (activeFilter.toLowerCase() == "completed") {
+                    amountOfItems = children.filter((item) => {
+                        return item.getAttribute("data-active") == "true";
+                    }).length;
+
+                    amountOfItemsLeftIndicator.textContent = amountOfItems + " completed items";
+                } else if (activeFilter.toLowerCase() == "all") {
+                    amountOfItems = children.filter((item) => {
+                        return item.getAttribute("data-active") != "true";
+                    }).length;
+
+                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
+                } else if (activeFilter.toLowerCase() == "active") {
+                    amountOfItems = children.filter((item) => {
+                        return item.getAttribute("data-active") != "true";
+                    }).length;
+
+                    amountOfItemsLeftIndicator.textContent = amountOfItems + " items left";
+                }
+            }
+        }
+    });
+
     document.querySelectorAll("[data-disableonclick]").forEach((item) => {
         item.addEventListener("click", () => {
             item.setAttribute("disabled", "true");
-
-            console.log("DISABLED");
         });
-    });
-
-    // @ts-expect-error
-    document.body.addEventListener("htmx:responseError", (e: ErrorEvent) => {
-        toast.error(
-            {
-                title: e.detail.xhr.status.toString(),
-                message: e.detail.xhr.responseText,
-            },
-            {
-                theme: document.documentElement.getAttribute("data-theme") as
-                    | "dark"
-                    | "light"
-                    | "system",
-                role: "alert",
-                style: "glass",
-                close_button: {
-                    is_shown_on_hover: false,
-                    position: "right",
-                },
-            }
-        );
     });
 
     document

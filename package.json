@@ -9,6 +9,8 @@
     "dev": "node esbuild.config.mjs --watchmode",
     "dev:client": "node esbuild.config.client.mjs --watchmode",
     "dev:css": "node esbuild.config.css.mjs --watchmode",
+    "db:push": " drizzle-kit push:pg --config=drizzle.config.ts",
+    "db:pull": " drizzle-kit introspect:pg --config=drizzle.config.ts",
     "build": "node esbuild.config.css.mjs && node esbuild.config.client.mjs && node esbuild.config.mjs",
     "start": "cross-env NODE_ENV=production node ./build/index.cjs",
     "format": "prettier -w \"./src/**/*.{ts,tsx,js,jsx,pug}\" --plugin=\"@prettier/plugin-pug\""
@@ -42,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "autoprefixer": "^10.4.16",
+    "drizzle-kit": "^0.20.2",
     "esbuild": "^0.19.5",
     "esbuild-sass-plugin": "^2.16.0",
     "eslint": "^8.53.0",

@@ -2,53 +2,91 @@ import { Router } from "express";
 
 import { getTimestampForCacheBusting } from "@/lib/utils";
 import { db } from "@/lib/db";
-import { todos } from "@/model/schema";
+import { filterTodoValues, filters, todos } from "@/model/schema";
+import { eq } from "drizzle-orm";
 
 const router = Router();
 
 router.get("/get-todos", async (req, res, _next) => {
     try {
-        console.log("query", req.query, "params", req.params);
+        let filterBy = req.query.filterTodo;
 
-        const listOfTodos = await db.select().from(todos);
+        if (!filterBy || !filterTodoValues.enumValues.includes(filterBy.toString() as "all" | "active" | "completed")) {
+            filterBy = (await db.selectDistinct().from(filters).where(eq(filters.key, "filterTodo")))[0]?.value || "all";
+        }
+
+        let listOfTodos: {
+            id: string;
+            creationDate: string | null;
+            isFinished: boolean | null;
+            content: string | null;
+        }[];
+
+        if (filterBy && typeof filterBy == "string") {
+            filterBy = decodeURIComponent(filterBy.toLowerCase().trim());
+
+            if (filterBy == "active") {
+                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, false));
+            } else if (filterBy == "completed") {
+                listOfTodos = await db.select().from(todos).where(eq(todos.isFinished, true));
+            } else {
+                listOfTodos = await db.select().from(todos);
+            }
+        } else {
+            listOfTodos = await db.select().from(todos);
+        }
+
+        listOfTodos.sort((a, b) => {
+            if (+a.creationDate! > +b.creationDate!) {
+                return 1;
+            }
+
+            if (+a.creationDate! < +b.creationDate!) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        listOfTodos.sort((a, b) => {
+            if (a.isFinished && !b.isFinished) {
+                return -1;
+            }
+
+            if (!a.isFinished && b.isFinished) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         if (listOfTodos.length == 0) {
-            res.send(
-                '<div class="p-5 w-full" style="opacity: 0.5; font-size: 0.875rem;">There are no todos right now. Create one?</div>'
-            );
+            if (filterBy == "all") {
+                res.send(
+                    '<div data-type="empty-list-indicator" class="p-5 w-full" style="opacity: 0.5; font-size: 0.875rem;">There are no todos right now. Create one?</div>'
+                );
+            } else if (filterBy == "completed") {
+                res.send(
+                    '<div data-type="empty-list-indicator" class="p-5 w-full" style="opacity: 0.5; font-size: 0.875rem;">There are no completed todos. Check one to see it here.</div>'
+                );
+            } else {
+                res.send(
+                    '<div data-type="empty-list-indicator" class="p-5 w-full" style="opacity: 0.5; font-size: 0.875rem;">There are no active todos right now. Create one?</div>'
+                );
+            }
 
             return;
         }
 
+        res.setHeader("HX-Trigger", "todoListUpdated");
+
         res.send(
-            listOfTodos
-                .sort((a, b) => {
-                    if (a.creationDate!.getTime() > b.creationDate!.getTime()) {
-                        return -1;
-                    }
-
-                    if (a.creationDate!.getTime() < b.creationDate!.getTime()) {
-                        return 1;
-                    }
-
-                    return 0;
-                })
-                .sort((a, b) => {
-                    if (a.isFinished && !b.isFinished) {
-                        return -1;
-                    }
-
-                    if (b.isFinished && !a.isFinished) {
-                        return 1;
-                    }
-
-                    return 0;
-                })
-                .map((item) => {
+            listOfTodos.map((item) => {
                     return `
                     <div
-                        class="p-5 justify-start flex gap-4 items-center w-full toggle-finished-todo"
+                        class="p-4 justify-between flex gap-4 items-center w-full toggle-finished-todo"
                         id="todo-${item.id}"
+                        ${item.isFinished ? "data-active=\"true\"" : ""}
                     >
                         <button
                             type="button"
@@ -103,7 +141,7 @@ router.get("/get-todos", async (req, res, _next) => {
                             </div>
                         </button>
 
-                        <div class="flex-1 flex justify-end items-center">
+                        <div class="flex justify-end items-center">
                             <button
                                 class="show-on-hover"
                                 hx-delete="/delete-todo?todoId=${item.id}"
@@ -142,7 +180,7 @@ router.get("/get-todos", async (req, res, _next) => {
     } catch (err) {
         console.log("\n-- An error has occured --\n");
         console.error(err);
-        console.log("\n-- --\n");
+        console.log("\n-- End of error --\n");
 
         res.status(400).send(
             "Something went wrong in getting the latest list of todos."

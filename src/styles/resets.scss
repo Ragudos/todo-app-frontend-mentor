@@ -30,14 +30,7 @@
 *,
 ::before,
 ::after {
-    box-sizing: border-box;  
-        
-    box-shadow:
-        var(--_ring-offset, 0px 0px 0px 0px) var(--_clr-ring-offset, transparent),
-        var(--_ring, 0px 0px 0px 0px) var(--_clr-ring, transparent),
-        var(--_box-shadow, 0px 0px 0px 0px)
-    ;
-    
+    box-sizing: border-box;
     @include mixins.reducedMotion {
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
@@ -57,6 +50,18 @@ html {
     &:focus-within {
         scroll-behavior: smooth;
     }
+}
+
+form,
+button,
+a,
+input,
+textarea {    
+    box-shadow:
+        var(--_ring-offset, 0px 0px 0px 0px) var(--_clr-ring-offset, transparent),
+        var(--_ring, 0px 0px 0px 0px) var(--_clr-ring, transparent),
+        var(--_box-shadow, 0px 0px 0px 0px)
+    ;   
 }
 
 html,
@@ -383,7 +388,17 @@ img {
 }
 
 .shadow-lg {
-    --_box-shadow: 0px 8px 32px hsl(0 0% 0% / 0.175);
+    box-shadow: 0px 8px 32px hsl(235 21% 11% / 0.075);
+}
+
+[data-theme=dark] .shadow-lg {
+    box-shadow: 0px 8px 32px hsl(0 0% 0% / 0.075);
+}
+
+[data-theme=system] .shadow-lg {
+    @include mixins.darkMode {
+        box-shadow: 0px 8px 32px hsl(0 0% 0% / 0.075);
+    }
 }
 
 .w-full {
@@ -534,8 +549,15 @@ input[type=submit] {
     transition-duration: 250ms;
 }
 
-.toggle-finished-todo:hover .show-on-hover {
-    opacity: 1;
+.toggle-finished-todo  {
+
+    &:focus-within,
+    &:hover,
+    &:focus-visible {
+        .show-on-hover {
+            opacity: 1;
+        }
+    }
 }
 
 .flex-1 {
@@ -557,5 +579,95 @@ input[type=submit] {
         margin-block: auto;
 
         left: 1.25rem;
+    }
+}
+
+.section-of-todos {
+    max-height: 30rem;
+}
+
+button[name="active-filter-todo-button"] {
+    color: hsl(220 98% 61%);
+}
+
+#filter-todos-form {
+    button {
+        font-size: 0.75rem;
+
+        &:hover:not([aria-checked]) {
+            opacity: 1;
+        }
+    }
+
+    button:not([aria-checked]) {
+        opacity: 0.5;
+
+        will-change: opacity;
+        transition-property: opacity;
+        transition-duration: 250ms;
+    }
+}
+
+#filter-todos-form {
+    position: absolute;
+
+    width: 100%;
+
+    padding: 1rem;
+    justify-content: center;
+
+    font-size: 0.875rem !important;
+
+    box-shadow: 0px 8px 32px hsl(0 0% 0% / 0.175);
+
+    border-radius: 0.25rem;
+
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+
+    top: 150%;
+
+    $bgCard: 0 0% 100%;
+
+    background-color: hsl($bgCard);
+
+    @include mixins.mobileAndUp {
+        font-size: 0.75rem !important;
+        box-shadow: none;
+        width: auto;
+        position: unset;
+        padding: 0;
+        font-size: inherit;
+        justify-content: unset;
+        border-radius: unset;
+    }
+}
+
+[data-theme=dark] #filter-todos-form {
+    $bgCard: 235 24% 19%;
+
+    background-color: hsl($bgCard);
+}
+
+[data-theme=system] #filter-todos-form {
+    @include mixins.darkMode {
+        $bgCard: 235 24% 19%;
+
+        background-color: hsl($bgCard);
+    }
+}
+
+.clear-completed-btn {
+    will-change: opacity;
+    transition-property: opacity;
+    transition-duration: 250ms;
+
+    opacity: 0.5;
+    font-size: 0.75rem;
+    font-weight: 400;
+    
+    &:hover {
+        opacity: 1;
     }
 }
