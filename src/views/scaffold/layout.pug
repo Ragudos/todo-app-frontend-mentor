@@ -6,8 +6,7 @@ html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV)
         link(rel="preconnect", href="https://fonts.googleapis.com")
         link(
             rel="preconnect",
-            href="https://fonts.gstatic.com",
-            crossorigin="use-credential"
+            href="https://fonts.gstatic.com"
         )
         link(
             nonce=locals.cspNonce,
@@ -55,14 +54,14 @@ html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV)
             script(
                 nonce=locals.cspNonce,
                 type="module",
-                defer,
                 src="/client/toast.mjs?t=" + timeStamp
+                crossorigin
             )
             script(
                 nonce=locals.cspNonce,
                 type="module",
-                defer,
                 src="/client/htmx.mjs?t=" + timeStamp
+                crossorigin
             )
         else
             link(
@@ -101,13 +100,14 @@ html(data-theme=locals.theme, lang="en", data-env=locals.ENV.NODE_ENV)
             script(
                 nonce=locals.cspNonce,
                 type="module",
-                defer,
                 src="/client/toast.mjs"
+                crossorigin
             )
             script(
                 nonce=locals.cspNonce,
                 type="module",
                 src="/client/htmx.mjs"
+                crossorigin
             )
 
         block metadata

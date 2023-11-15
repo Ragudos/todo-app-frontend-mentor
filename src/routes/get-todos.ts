@@ -117,10 +117,10 @@ router.get("/get-todos", async (req, res, _next) => {
                             data-disableonclick
                             hx-indicator="#loading-indicator"
                             ${item.isFinished ? 'aria-current="true"' : ""}    
+                            aria-label="Indicator whether a todo is finished or not. Click to toggle."
                         >
                             <div
                                 class="icon rounded-full todo-checkmark"
-                                aria-label="Indicator whether a todo is finished or not. Click to toggle."
                             >
                                 ${
                                     item.isFinished
@@ -148,11 +148,6 @@ router.get("/get-todos", async (req, res, _next) => {
                                     item.isFinished
                                         ? "strikethrough finished-todo"
                                         : "unfinished-todo"
-                                }"
-                                aria-label="${
-                                    item.isFinished
-                                        ? "This todo is finished"
-                                        : "This todo is not yet finished."
                                 }"
                             >
                                 ${item.content}

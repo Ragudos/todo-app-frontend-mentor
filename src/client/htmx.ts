@@ -9,7 +9,7 @@ function init() {
 
     document
         .querySelector("#section-of-todos")
-        ?.addEventListener("htmx:afterOnLoad", (e) => {
+        ?.addEventListener("htmx:afterOnLoad", (_e) => {
             let amountOfItems = 0;
             const activeFilterButton = document.querySelector(
                 "[name='active-filter-todo-button']"
@@ -52,7 +52,7 @@ function init() {
                         }).length;
 
                         amountOfItemsLeftIndicator.textContent =
-                            amountOfItems + " items left";
+                            amountOfItems + " todos left to be done";
                     }
                 }
             }

@@ -30,9 +30,7 @@ if (todos)
                                 width="11",
                                 height="9"
                             )
-                    .strikethrough.finished-todo(
-                        aria-label="This todo is finished"
-                    ) #{ todo.content }
+                    .strikethrough.finished-todo #{ todo.content }
                 .flex.justify-end.items-center
                     button.show-on-hover(
                         hx-delete="/delete-todo?todoId=" + todo.id,
@@ -65,12 +63,9 @@ if (todos)
                     hx-swap="none",
                     data-disableonclick,
                     hx-indicator="#loading-indicator"
-                    aria-label="Indicator whether a todo is finished or not. Click to toggle."
                 )
                     .icon.rounded-full.todo-checkmark
-                    .unfinished-todo(
-                        aria-label="This todo is not yet finished"
-                    ) #{ todo.content }
+                    .unfinished-todo #{ todo.content }
                 .flex.justify-end.items-center
                     button.show-on-hover(
                         hx-delete="/delete-todo?todoId=" + todo.id,
